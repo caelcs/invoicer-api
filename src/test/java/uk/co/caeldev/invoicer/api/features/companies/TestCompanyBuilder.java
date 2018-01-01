@@ -13,6 +13,7 @@ public class TestCompanyBuilder {
     private String postCode = postcode().next();
     private Bank bank = TestBankBuilder.newBuilder().build();
     private String vatNumber = string().next();
+    private String username =string().next();
 
     TestCompanyBuilder() {
     }
@@ -22,6 +23,6 @@ public class TestCompanyBuilder {
     }
 
     public Company build() {
-        return new Company(guid, name, address, postCode, bank, vatNumber);
+        return new Company(guid, username, name, address, postCode, bank, vatNumber);
     }
 }

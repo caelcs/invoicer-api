@@ -16,6 +16,7 @@ public class Company {
     @Id
     private ObjectId id;
     private UUID guid;
+    private String username;
     private String name;
     private String address;
     private String postCode;
@@ -25,12 +26,14 @@ public class Company {
     private Long version;
 
     public Company(final UUID guid,
+                   final String username,
                    final String name,
                    final String address,
                    final String postCode,
                    final Bank bank,
                    final String vatNumber) {
         this.guid = guid;
+        this.username = username;
         this.name = name;
         this.address = address;
         this.postCode = postCode;
@@ -68,6 +71,10 @@ public class Company {
 
     public Long getVersion() {
         return version;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     @Override
