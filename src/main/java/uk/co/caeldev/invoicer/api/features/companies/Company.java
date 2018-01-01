@@ -1,11 +1,19 @@
 package uk.co.caeldev.invoicer.api.features.companies;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Version;
 
 import java.util.UUID;
 
+@Entity("companies")
 public class Company {
 
+    @Id
     private ObjectId id;
     private UUID guid;
     private String name;
@@ -13,6 +21,7 @@ public class Company {
     private String postCode;
     private Bank bank;
     private String vatNumber;
+    @Version
     private Long version;
 
     public Company(final UUID guid,
@@ -59,5 +68,20 @@ public class Company {
 
     public Long getVersion() {
         return version;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
     }
 }
