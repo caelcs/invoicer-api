@@ -13,6 +13,7 @@ public class Company {
     private String postCode;
     private Bank bank;
     private String vatNumber;
+    private Long version;
 
     public Company(final UUID guid,
                    final String name,
@@ -50,5 +51,13 @@ public class Company {
 
     public UUID getGuid() {
         return guid;
+    }
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public Long getVersion() {
+        return version;
     }
 }

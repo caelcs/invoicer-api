@@ -4,6 +4,10 @@ import static uk.org.fyodor.generators.RDG.string;
 
 public class TestBankBuilder {
 
+    private String name;
+    private String accountNumber;
+    private String sortCode;
+
     TestBankBuilder() {
     }
 
@@ -12,6 +16,9 @@ public class TestBankBuilder {
     }
 
     public Bank build() {
-        return new Bank(string().next(), string().next(), string().next());
+        name = string().next();
+        accountNumber = string().next();
+        sortCode = string().next();
+        return new Bank(name, accountNumber, sortCode);
     }
 }

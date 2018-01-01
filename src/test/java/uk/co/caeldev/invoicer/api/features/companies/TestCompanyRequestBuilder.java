@@ -1,8 +1,15 @@
 package uk.co.caeldev.invoicer.api.features.companies;
 
+import static uk.org.fyodor.generators.RDG.postcode;
 import static uk.org.fyodor.generators.RDG.string;
 
 public class TestCompanyRequestBuilder {
+
+    private String name;
+    private String address;
+    private String postCode;
+    private String vatNumber;
+    private Bank bank;
 
     TestCompanyRequestBuilder() {
     }
@@ -12,7 +19,12 @@ public class TestCompanyRequestBuilder {
     }
 
     public CompanyRequest build() {
-        return new CompanyRequest(string().next(), string().next(), string().next(),
-                string().next(), TestBankBuilder.newBuilder().build());
+        name = string().next();
+        address = string().next();
+        postCode = postcode().next();
+        vatNumber = string().next();
+        bank = TestBankBuilder.newBuilder().build();
+        return new CompanyRequest(name, address, postCode,
+                vatNumber, bank);
     }
 }
