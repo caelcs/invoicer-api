@@ -2,6 +2,10 @@ package uk.co.caeldev.invoicer.api.features.companies;
 
 public class CompanyService {
 
+    public CompanyService(CompanyRepository companyRepository) {
+
+    }
+
     public Company create(final String name,
                           final String address,
                           final Bank bank,
