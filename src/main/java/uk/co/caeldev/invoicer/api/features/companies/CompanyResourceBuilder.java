@@ -1,5 +1,7 @@
 package uk.co.caeldev.invoicer.api.features.companies;
 
+import uk.co.caeldev.invoicer.api.features.common.domain.Bank;
+
 import java.util.UUID;
 
 public class CompanyResourceBuilder {

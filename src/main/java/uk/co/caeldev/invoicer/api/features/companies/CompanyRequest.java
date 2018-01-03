@@ -3,6 +3,7 @@ package uk.co.caeldev.invoicer.api.features.companies;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import uk.co.caeldev.invoicer.api.features.common.domain.Bank;
 
 public class CompanyRequest {
 

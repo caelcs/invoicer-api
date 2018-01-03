@@ -1,4 +1,4 @@
-package uk.co.caeldev.invoicer.api.features.companies;
+package uk.co.caeldev.invoicer.api.features.common.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

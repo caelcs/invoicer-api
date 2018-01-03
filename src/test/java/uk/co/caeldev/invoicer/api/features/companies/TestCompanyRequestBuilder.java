@@ -1,5 +1,7 @@
 package uk.co.caeldev.invoicer.api.features.companies;
 
+import uk.co.caeldev.invoicer.api.features.common.domain.Bank;
+
 import static uk.org.fyodor.generators.RDG.postcode;
 import static uk.org.fyodor.generators.RDG.string;
 
