@@ -2,6 +2,8 @@ package uk.co.caeldev.invoicer.api.features.companies;
 
 import uk.co.caeldev.invoicer.api.features.common.domain.Bank;
 
+import java.util.UUID;
+
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
@@ -22,5 +24,9 @@ public class CompanyService {
         final Company companyToBeSaved = companyFactory.getInstance(name, address, bank,
                 postCode, vatNumber);
         return companyRepository.save(companyToBeSaved);
+    }
+
+    public Company update(UUID companyGuid, String name, String address, Bank bank, String postCode, String vatNumber) {
+        return null;
     }
 }

@@ -33,4 +33,8 @@ public class CompanyController {
                         .withCompany(company)
                         .build());
     }
+
+    public ResponseEntity<CompanyResource> update(CompanyRequest companyRequest) {
+        return null;
+    }
 }

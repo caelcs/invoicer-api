@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import uk.co.caeldev.invoicer.api.features.common.exception.ServiceException;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -26,12 +28,12 @@ public class CompanyControllerTest {
     private CompanyController companyController;
 
     @Before
-    public void testee() throws Exception {
+    public void testee() {
         companyController = new CompanyController(companyService);
     }
     
     @Test
-    public void shouldCreateCompany() throws Exception {
+    public void shouldCreateCompany() {
         //Given
         final CompanyRequest companyRequest = TestCompanyRequestBuilder.newBuilder().build();
 
@@ -57,7 +59,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void shouldThrowServiceExceptionWhenCreationFails() throws Exception {
+    public void shouldThrowServiceExceptionWhenCreationFails() {
         //Given
         final CompanyRequest companyRequest = TestCompanyRequestBuilder.newBuilder().build();
 
@@ -72,4 +74,33 @@ public class CompanyControllerTest {
         //When
         this.companyController.create(companyRequest);
     }
+
+    @Test
+    public void shouldUpdateCompany() {
+        //Given
+        final CompanyRequest companyRequest = TestCompanyRequestBuilder.newBuilder().build();
+
+        //And
+        final Company expectedCompany = TestCompanyBuilder.newBuilder().build();
+        final UUID companyGuid = UUID.randomUUID();
+        when(companyService.update(companyGuid, companyRequest.getName(), companyRequest.getAddress(),
+                companyRequest.getBank(), companyRequest.getPostCode(), companyRequest.getVatNumber()))
+                .thenReturn(expectedCompany);
+
+        //When
+        final ResponseEntity<CompanyResource> result = this.companyController.update(companyRequest);
+
+        //Then
+        assertThat(result.getStatusCode())
+                .isEqualTo(HttpStatus.OK);
+        final CompanyResource body = result.getBody();
+        assertThat(body).isNotNull();
+        assertThat(body.getGuid()).isEqualTo(companyGuid);
+        assertThat(body.getName()).isEqualTo(expectedCompany.getName());
+        assertThat(body.getAddress()).isEqualTo(expectedCompany.getAddress());
+        assertThat(body.getPostCode()).isEqualTo(expectedCompany.getPostCode());
+        assertThat(body.getBank()).isEqualTo(expectedCompany.getBank());
+        assertThat(body.getVatNumber()).isEqualTo(expectedCompany.getVatNumber());
+    }
+
 }
