@@ -19,6 +19,9 @@ public class Company extends BaseEntity {
     private Bank bank;
     private String vatNumber;
 
+    public Company() {
+    }
+
     public Company(final UUID guid,
                    final String username,
                    final String name,

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 @RestController
@@ -18,7 +19,8 @@ public class CompanyController {
     }
 
     @PostMapping(value = "/companies",
-          produces = {TEXT_PLAIN_VALUE})
+            produces = {APPLICATION_JSON_VALUE},
+            consumes = {APPLICATION_JSON_VALUE})
     public ResponseEntity<CompanyResource> create(final @RequestBody CompanyRequest companyRequest) {
 
         final Company company = companyService.create(companyRequest.getName(), companyRequest.getAddress(),
