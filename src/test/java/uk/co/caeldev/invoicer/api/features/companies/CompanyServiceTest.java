@@ -5,7 +5,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.BeanUtils;
 import uk.co.caeldev.invoicer.api.features.common.domain.Bank;
+
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -20,6 +24,9 @@ public class CompanyServiceTest {
 
     @Mock
     private CompanyFactory companyFactory;
+
+    @Mock
+    private CompanyMerger companyMerger;
 
     private CompanyService companyService;
 
@@ -52,6 +59,54 @@ public class CompanyServiceTest {
         //Then
         assertThat(result).isNotNull();
         assertThat(result).isEqualTo(expectedCompanySaved);
+    }
+
+    @Test
+    public void shouldUpdateCompanyName() {
+        //Given
+        final UUID companyGuid = UUID.randomUUID();
+        final String name = string().next();
+        final String address = string().next();
+        final Bank bank = TestBankBuilder.newBuilder().build();
+        final String postCode = postcode().next();
+        final String vatNumber = string().next();
+
+        //And
+        final Company expectedExistingCompany = TestCompanyBuilder.newBuilder()
+                .withAddress(address)
+                .withBank(bank)
+                .withGuid(companyGuid)
+                .withPostCode(postCode)
+                .withVatNumber(vatNumber)
+                .build();
+        when(companyRepository.findByGuid(companyGuid))
+                .thenReturn(Optional.of(expectedExistingCompany));
+
+        //And
+        final Company companyToBeUpdate = TestCompanyBuilder.newBuilder()
+                .withAddress(address)
+                .withName(name)
+                .withBank(bank)
+                .withGuid(companyGuid)
+                .withPostCode(postCode)
+                .withVatNumber(vatNumber)
+                .build();
+
+
+
+        when(companyFactory.getInstance(name, address, bank, postCode, vatNumber))
+                .thenReturn(companyToBeUpdate);
+
+        //And
+        when(companyRepository.save(companyToBeUpdate))
+                .thenReturn(companyToBeUpdate);
+
+        //When
+        final Company result = companyService.update(companyGuid, name, address, bank, postCode, vatNumber);
+
+        //Then
+        assertThat(result)
+                .isEqualToComparingFieldByField(companyToBeUpdate);
     }
 
 }

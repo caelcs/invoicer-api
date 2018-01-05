@@ -79,23 +79,23 @@ public class CompanyControllerTest {
     public void shouldUpdateCompany() {
         //Given
         final CompanyRequest companyRequest = TestCompanyRequestBuilder.newBuilder().build();
+        final UUID companyGuid = UUID.randomUUID();
 
         //And
         final Company expectedCompany = TestCompanyBuilder.newBuilder().build();
-        final UUID companyGuid = UUID.randomUUID();
         when(companyService.update(companyGuid, companyRequest.getName(), companyRequest.getAddress(),
                 companyRequest.getBank(), companyRequest.getPostCode(), companyRequest.getVatNumber()))
                 .thenReturn(expectedCompany);
 
         //When
-        final ResponseEntity<CompanyResource> result = this.companyController.update(companyRequest);
+        final ResponseEntity<CompanyResource> result = this.companyController.update(companyRequest, companyGuid);
 
         //Then
         assertThat(result.getStatusCode())
                 .isEqualTo(HttpStatus.OK);
         final CompanyResource body = result.getBody();
         assertThat(body).isNotNull();
-        assertThat(body.getGuid()).isEqualTo(companyGuid);
+        assertThat(body.getGuid()).isEqualTo(expectedCompany.getGuid());
         assertThat(body.getName()).isEqualTo(expectedCompany.getName());
         assertThat(body.getAddress()).isEqualTo(expectedCompany.getAddress());
         assertThat(body.getPostCode()).isEqualTo(expectedCompany.getPostCode());

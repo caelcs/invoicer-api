@@ -2,6 +2,7 @@ package uk.co.caeldev.invoicer.api.features.companies;
 
 import uk.co.caeldev.invoicer.api.features.common.domain.Bank;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class CompanyService {
@@ -26,7 +27,20 @@ public class CompanyService {
         return companyRepository.save(companyToBeSaved);
     }
 
-    public Company update(UUID companyGuid, String name, String address, Bank bank, String postCode, String vatNumber) {
+    public Company update(final UUID companyGuid,
+                          final String name,
+                          final String address,
+                          final Bank bank,
+                          final String postCode,
+                          final String vatNumber) {
+
+        final Optional<Company> company = companyRepository.findByGuid(companyGuid);
+
+        if (!company.isPresent()) {
+            return create(name, address, bank, postCode, vatNumber);
+        }
+
+        companyFactory.getInstance()
         return null;
     }
 }

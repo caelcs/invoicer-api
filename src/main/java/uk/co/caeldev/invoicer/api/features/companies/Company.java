@@ -22,6 +22,7 @@ public class Company extends BaseEntity {
     public Company() {
     }
 
+
     public Company(final UUID guid,
                    final String username,
                    final String name,
