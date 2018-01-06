@@ -1,8 +1,8 @@
-package uk.co.caeldev.invoicer.api.features.companies;
+package uk.co.caeldev.invoicer.api.features.common.merger;
 
-import uk.co.caeldev.invoicer.api.features.common.Merger;
+import uk.co.caeldev.invoicer.api.features.companies.Company;
 
-public final class CompanyMerger implements Merger<Company> {
+final class CompanyMerger implements Merger<Company> {
 
     @Override
     public Class<Company> getClazz() {

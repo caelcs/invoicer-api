@@ -88,7 +88,8 @@ public class CompanyControllerTest {
                 .thenReturn(expectedCompany);
 
         //When
-        final ResponseEntity<CompanyResource> result = this.companyController.update(companyRequest, companyGuid);
+        final ResponseEntity<CompanyResource> result = this.companyController
+                .update(companyRequest, companyGuid);
 
         //Then
         assertThat(result.getStatusCode())
