@@ -16,6 +16,7 @@ public class EntityMerger {
         if (!merger.isPresent()) {
             throw new IllegalArgumentException();
         }
+
         return merger.get().merge(source, target);
     }
 }
