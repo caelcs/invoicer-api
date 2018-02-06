@@ -24,7 +24,7 @@ public class CompanyResourceBuilder {
         return new CompanyResource(guid, name, address, postCode, vatNumber, bank);
     }
 
-    public CompanyResourceBuilder withCompany(Company company) {
+    public CompanyResourceBuilder withCompany(final Company company) {
         this.guid = company.getGuid();
         this.name = company.getName();
         this.address = company.getAddress();

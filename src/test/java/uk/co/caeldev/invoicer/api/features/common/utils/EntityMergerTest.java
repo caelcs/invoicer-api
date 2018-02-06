@@ -1,4 +1,4 @@
-package uk.co.caeldev.invoicer.api.features.common.merger;
+package uk.co.caeldev.invoicer.api.features.common.utils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -7,13 +7,14 @@ import uk.co.caeldev.invoicer.api.features.companies.TestCompanyBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CompanyMergerTest {
+public class EntityMergerTest {
 
-    private CompanyMerger companyMerger;
+
+    private EntityMerger entityMerger;
 
     @Before
     public void testee() {
-        companyMerger = new CompanyMerger();
+        entityMerger = new EntityMerger();
     }
 
     @Test
@@ -23,7 +24,7 @@ public class CompanyMergerTest {
         final Company target = TestCompanyBuilder.newBuilder().build();
 
         //When
-        final Company merged = companyMerger.merge(source, target);
+        final Company merged = entityMerger.merge(source, target);
 
         //Then
         assertThat(merged.getName()).isEqualTo("test");

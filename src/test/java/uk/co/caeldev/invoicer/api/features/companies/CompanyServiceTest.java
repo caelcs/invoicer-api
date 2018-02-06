@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.co.caeldev.invoicer.api.features.common.domain.Bank;
-import uk.co.caeldev.invoicer.api.features.common.merger.EntityMerger;
+import uk.co.caeldev.invoicer.api.features.common.utils.EntityMerger;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -96,7 +96,7 @@ public class CompanyServiceTest {
 
         //And
         final Company expectedMergedCompany = TestCompanyBuilder.newBuilder().build();
-        when(entityMerger.merge(expectedExistingCompany, companyToBeUpdate, Company.class))
+        when(entityMerger.merge(expectedExistingCompany, companyToBeUpdate))
                 .thenReturn(expectedMergedCompany);
 
         //And

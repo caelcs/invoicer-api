@@ -3,7 +3,7 @@ package uk.co.caeldev.invoicer.api.features.companies;
 import org.mongodb.morphia.Datastore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import uk.co.caeldev.invoicer.api.features.common.merger.EntityMerger;
+import uk.co.caeldev.invoicer.api.features.common.utils.EntityMerger;
 
 @Configuration
 public class CompanyConfig {
