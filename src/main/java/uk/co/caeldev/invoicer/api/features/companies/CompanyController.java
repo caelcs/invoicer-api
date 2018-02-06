@@ -2,11 +2,9 @@ package uk.co.caeldev.invoicer.api.features.companies;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -48,6 +46,23 @@ public class CompanyController {
                 .body(CompanyResourceBuilder
                         .newBuilder()
                         .withCompany(companyUpdated)
+                        .build());
+    }
+
+    @GetMapping(value = "/companies/{companyGuid}",
+            produces = {APPLICATION_JSON_VALUE})
+    public ResponseEntity<CompanyResource> get(final @PathVariable UUID companyGuid) {
+        final Optional<Company> latestByGuid = companyService.findLatestByGuid(companyGuid);
+
+        if (!latestByGuid.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CompanyResourceBuilder
+                        .newBuilder()
+                        .withCompany(latestByGuid.get())
                         .build());
     }
 }
