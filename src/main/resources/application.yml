@@ -1,0 +1,10 @@
+mongo:
+  servers:
+    - name: localhost
+      port: 27017
+  database: copyshare
+  username: dev
+  password: dev
+
+morphia:
+  entityPackage: uk.co.caeldev.invoicer.api
