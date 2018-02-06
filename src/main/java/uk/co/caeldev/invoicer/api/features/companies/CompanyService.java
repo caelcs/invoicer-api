@@ -43,7 +43,7 @@ public class CompanyService {
 
         LOGGER.info("updating company guid {}", companyGuid);
 
-        final Optional<Company> company = companyRepository.findByGuid(companyGuid);
+        final Optional<Company> company = companyRepository.findLatestByGuid(companyGuid);
 
         if (!company.isPresent()) {
             return create(name, address, bank, postCode, vatNumber);
@@ -56,5 +56,9 @@ public class CompanyService {
         LOGGER.info("company merged: {}", merged);
 
         return companyRepository.save(merged);
+    }
+
+    public Optional<Company> findLatestByGuid(final UUID companyGuid) {
+        return companyRepository.findLatestByGuid(companyGuid);
     }
 }

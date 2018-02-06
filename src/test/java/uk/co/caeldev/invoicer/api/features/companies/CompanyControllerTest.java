@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import uk.co.caeldev.invoicer.api.features.common.exception.ServiceException;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -102,6 +103,49 @@ public class CompanyControllerTest {
         assertThat(body.getPostCode()).isEqualTo(expectedCompany.getPostCode());
         assertThat(body.getBank()).isEqualTo(expectedCompany.getBank());
         assertThat(body.getVatNumber()).isEqualTo(expectedCompany.getVatNumber());
+    }
+
+    @Test
+    public void shouldGetLatestCompany() {
+        //Given
+        final UUID companyGuid = UUID.randomUUID();
+
+        //And
+        final Company expectedCompany = TestCompanyBuilder.newBuilder().build();
+        when(companyService.findLatestByGuid(companyGuid))
+                .thenReturn(Optional.of(expectedCompany));
+
+        //When
+        final ResponseEntity<CompanyResource> result = this.companyController.get(companyGuid);
+
+        //Then
+        assertThat(result.getStatusCode())
+                .isEqualTo(HttpStatus.OK);
+        final CompanyResource body = result.getBody();
+        assertThat(body).isNotNull();
+        assertThat(body.getGuid()).isEqualTo(expectedCompany.getGuid());
+        assertThat(body.getName()).isEqualTo(expectedCompany.getName());
+        assertThat(body.getAddress()).isEqualTo(expectedCompany.getAddress());
+        assertThat(body.getPostCode()).isEqualTo(expectedCompany.getPostCode());
+        assertThat(body.getBank()).isEqualTo(expectedCompany.getBank());
+        assertThat(body.getVatNumber()).isEqualTo(expectedCompany.getVatNumber());
+    }
+
+    @Test
+    public void shouldGetNotFoundWhenCompanyDoesNotExists() {
+        //Given
+        final UUID companyGuid = UUID.randomUUID();
+
+        //And
+        when(companyService.findLatestByGuid(companyGuid))
+                .thenReturn(Optional.empty());
+
+        //When
+        final ResponseEntity<CompanyResource> result = this.companyController.get(companyGuid);
+
+        //Then
+        assertThat(result.getStatusCode())
+                .isEqualTo(HttpStatus.NOT_FOUND);
     }
 
 }

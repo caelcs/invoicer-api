@@ -79,7 +79,7 @@ public class CompanyServiceTest {
                 .withPostCode(postCode)
                 .withVatNumber(vatNumber)
                 .build();
-        when(companyRepository.findByGuid(companyGuid))
+        when(companyRepository.findLatestByGuid(companyGuid))
                 .thenReturn(Optional.of(expectedExistingCompany));
 
         //And
@@ -111,6 +111,24 @@ public class CompanyServiceTest {
         //Then
         assertThat(result)
                 .isEqualToComparingFieldByField(expectedCompanyUpdate);
+    }
+
+    @Test
+    public void shouldGetLatestCompany() {
+        //Given
+        final UUID companyGuid = UUID.randomUUID();
+
+        //And
+        final Company expectedCompany = TestCompanyBuilder.newBuilder().build();
+        when(companyRepository.findLatestByGuid(companyGuid))
+                .thenReturn(Optional.of(expectedCompany));
+
+        //When
+        final Optional<Company> latestByGuid = companyService.findLatestByGuid(companyGuid);
+
+        //Then
+        assertThat(latestByGuid.isPresent()).isTrue();
+        assertThat(latestByGuid.get()).isEqualTo(expectedCompany);
     }
 
 }

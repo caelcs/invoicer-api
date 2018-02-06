@@ -10,6 +10,7 @@ public class BaseEntity {
 
     @Id
     protected ObjectId id;
+
     protected UUID guid;
 
     @Version
@@ -36,9 +37,5 @@ public class BaseEntity {
 
     public Long getVersion() {
         return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
     }
 }

@@ -14,8 +14,8 @@ public class CompanyRepository extends GenericMorphiaRepository<Company, ObjectI
         super(Company.class, ds);
     }
 
-    public Optional<Company> findByGuid(final UUID companyGuid) {
+    public Optional<Company> findLatestByGuid(final UUID companyGuid) {
         Query<Company> query = getDatastore().createQuery(Company.class);
-        return Optional.of(query.field("guid").equal(companyGuid).get());
+        return Optional.of(query.field("guid").equal(companyGuid).order("-version").get());
     }
 }
