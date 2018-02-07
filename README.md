@@ -1,5 +1,7 @@
 # Invoicer Api
 
+[![Build Status](https://travis-ci.org/caelwinner/invoicer-api.svg?branch=master)](https://travis-ci.org/caelwinner/invoicer-api)
+
 ## Overview
 
 Rest Application that provides a series of endpoints to manage invoices
