@@ -9,18 +9,19 @@ import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerControllerTest {
 
     @Mock
-    private CustomerRepository customerRepository;
+    private CustomerService customerService;
 
     private CustomerController customerController;
 
     @Before
     public void setUp() {
-        customerController = new CustomerController();
+        customerController = new CustomerController(customerService);
     }
 
     @Test
@@ -30,7 +31,8 @@ public class CustomerControllerTest {
         final CustomerRequest customerRequest = TestCustomerRequestBuilder.newBuilder().build();
 
         //And
-        when(customerRepository.save(customer))
+        when(customerService.create(customerRequest.getName(), customerRequest.getAddress(),
+                customerRequest.getPostCode(), customerRequest.getVatNumber()))
                 .thenReturn(customer);
 
         //When
@@ -38,6 +40,7 @@ public class CustomerControllerTest {
 
         //Then
         assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(CREATED);
     }
 
 }

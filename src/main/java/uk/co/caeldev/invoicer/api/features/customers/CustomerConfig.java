@@ -12,4 +12,15 @@ public class CustomerConfig {
         return new CustomerRepository(datastore);
     }
 
+    @Bean
+    public CustomerFactory customerFactory() {
+        return new CustomerFactory();
+    }
+
+    @Bean
+    public CustomerService customerService(final CustomerRepository customerRepository,
+                                           final CustomerFactory customerFactory) {
+        return new CustomerService(customerRepository, customerFactory);
+    }
+
 }

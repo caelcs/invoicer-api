@@ -4,10 +4,12 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
 import uk.co.caeldev.invoicer.api.features.common.domain.BaseEntity;
 
 import java.util.UUID;
 
+@Entity("customers")
 public class Customer extends BaseEntity {
 
     private String name;
@@ -15,10 +17,15 @@ public class Customer extends BaseEntity {
     private String postCode;
     private String vatNumber;
 
-    public Customer(final String name,
+    public Customer() {
+    }
+
+    public Customer(final UUID guid,
+                    final String name,
                     final String address,
                     final String postCode,
                     final String vatNumber) {
+        this.guid = guid;
         this.name = name;
         this.address = address;
         this.postCode = postCode;
