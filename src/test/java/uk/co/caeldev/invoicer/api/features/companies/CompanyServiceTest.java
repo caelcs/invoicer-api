@@ -97,7 +97,7 @@ public class CompanyServiceTest {
 
         //And
         final Company expectedMergedCompany = TestCompanyBuilder.newBuilder().build();
-        when(entityMerger.merge(expectedExistingCompany, companyToBeUpdate))
+        when(entityMerger.merge(companyToBeUpdate, expectedExistingCompany))
                 .thenReturn(expectedMergedCompany);
 
         //And
