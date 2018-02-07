@@ -68,7 +68,7 @@ public class CompanyController {
     }
 
     @DeleteMapping("/companies/{companyGuid}")
-    public ResponseEntity delete(final @PathParam("companyGuid") UUID companyGuid) {
+    public ResponseEntity delete(final @PathVariable("companyGuid") UUID companyGuid) {
         final Optional<Company> company = companyService.findLatestByGuid(companyGuid);
 
         if (!company.isPresent()) {

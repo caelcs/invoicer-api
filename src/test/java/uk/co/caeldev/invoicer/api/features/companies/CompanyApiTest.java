@@ -1,6 +1,5 @@
 package uk.co.caeldev.invoicer.api.features.companies;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import uk.co.caeldev.invoicer.api.BaseIntegrationTest;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,11 +22,6 @@ public class CompanyApiTest extends BaseIntegrationTest {
     @Autowired
     private CompanyRepository companyRepository;
 
-    @Before
-    public void testee() {
-        companyRepository.deleteAll();
-    }
-    
     @Test
     public void shouldCreateCompany() {
         //Given
@@ -113,6 +108,24 @@ public class CompanyApiTest extends BaseIntegrationTest {
         //And
         final Optional<Company> latestCompany = companyRepository.findLatestByGuid(savedCompany.getGuid());
         assertThat(latestCompany.get().getVersion()).isEqualTo(2);
+    }
+
+    @Test
+    public void shouldFailGetLatestCompanyVersionWhenCompanyDoesNotExists() {
+        //Given
+        final CompanyRequest companyRequest = TestCompanyRequestBuilder.newBuilder().build();
+
+        //Then
+        given()
+            .port(serverPort)
+            .headers("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+            .pathParam("companyGuid", UUID.randomUUID())
+            .body(companyRequest)
+            .when()
+            .get("/companies/{companyGuid}")
+            .then()
+            .assertThat()
+            .statusCode(equalTo(NOT_FOUND.value()));
     }
 
     @Test
