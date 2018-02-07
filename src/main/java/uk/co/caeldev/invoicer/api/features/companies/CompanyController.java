@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -64,5 +65,17 @@ public class CompanyController {
                         .newBuilder()
                         .withCompany(latestByGuid.get())
                         .build());
+    }
+
+    @DeleteMapping("/companies/{companyGuid}")
+    public ResponseEntity delete(final @PathParam("companyGuid") UUID companyGuid) {
+        final Optional<Company> company = companyService.findLatestByGuid(companyGuid);
+
+        if (!company.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        companyService.delete(company.get());
+        return ResponseEntity.noContent().build();
     }
 }

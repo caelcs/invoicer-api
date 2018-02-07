@@ -61,4 +61,8 @@ public class CompanyService {
     public Optional<Company> findLatestByGuid(final UUID companyGuid) {
         return companyRepository.findLatestByGuid(companyGuid);
     }
+
+    public void delete(final Company company) {
+        companyRepository.delete(company);
+    }
 }

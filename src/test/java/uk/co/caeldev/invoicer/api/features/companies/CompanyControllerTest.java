@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyControllerTest {
@@ -146,6 +146,41 @@ public class CompanyControllerTest {
         //Then
         assertThat(result.getStatusCode())
                 .isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void shouldDeleteByGuidWhenCompanyExists() {
+        //Given
+        final UUID companyGuid = UUID.randomUUID();
+
+        //And
+        final Company expectedCompany = TestCompanyBuilder.newBuilder().build();
+        when(companyService.findLatestByGuid(companyGuid))
+                .thenReturn(Optional.of(expectedCompany));
+
+        //When
+        final ResponseEntity result = companyController.delete(companyGuid);
+
+        //Then
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        verify(companyService).delete(expectedCompany);
+    }
+
+    @Test
+    public void shouldNotDeleteWhenWhenCompanyDoesNotExists() {
+        //Given
+        final UUID companyGuid = UUID.randomUUID();
+
+        //And
+        when(companyService.findLatestByGuid(companyGuid))
+                .thenReturn(Optional.empty());
+
+        //When
+        final ResponseEntity result = companyController.delete(companyGuid);
+
+        //Then
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        verify(companyService, never()).delete(any(Company.class));
     }
 
 }

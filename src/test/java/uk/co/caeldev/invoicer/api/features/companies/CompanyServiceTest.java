@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.org.fyodor.generators.RDG.postcode;
 import static uk.org.fyodor.generators.RDG.string;
@@ -129,6 +130,19 @@ public class CompanyServiceTest {
         //Then
         assertThat(latestByGuid.isPresent()).isTrue();
         assertThat(latestByGuid.get()).isEqualTo(expectedCompany);
+    }
+
+    @Test
+    public void shouldDeleteCompany() {
+        //Given
+        final Company company = TestCompanyBuilder.newBuilder().build();
+
+        //When
+        companyService.delete(company);
+
+        //Then
+        verify(companyRepository).delete(company);
+
     }
 
 }
