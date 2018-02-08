@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.caeldev.invoicer.api.features.common.exception.ObjectNotFoundException;
 import uk.co.caeldev.invoicer.api.features.common.utils.EntityMerger;
 
+import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,7 +46,8 @@ public class CustomerService {
         final Optional<Customer> latestByGuid = customerRepository.findLatestByGuid(customerGuid);
 
         if (!latestByGuid.isPresent()) {
-            throw new ObjectNotFoundException();
+            final String message = MessageFormat.format("Customer does not exists for guid {0}", customerGuid);
+            throw new ObjectNotFoundException(message);
         }
 
         final Customer customerToBeMerge = customerFactory.getInstance(name, address, postCode, vatNumber);

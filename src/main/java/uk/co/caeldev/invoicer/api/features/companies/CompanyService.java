@@ -6,6 +6,7 @@ import uk.co.caeldev.invoicer.api.features.common.domain.Bank;
 import uk.co.caeldev.invoicer.api.features.common.exception.ObjectNotFoundException;
 import uk.co.caeldev.invoicer.api.features.common.utils.EntityMerger;
 
+import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -59,7 +60,8 @@ public class CompanyService {
         final Optional<Company> latestByGuid = companyRepository.findLatestByGuid(companyGuid);
 
         if (!latestByGuid.isPresent()) {
-            throw new ObjectNotFoundException();
+            final String message = MessageFormat.format("Company does not exists for guid {0}", companyGuid);
+            throw new ObjectNotFoundException(message);
         }
 
         return latestByGuid.get();
