@@ -4,7 +4,10 @@ public class ApiError {
 
     private String code;
     private String message;
-    private final String description;
+    private String description;
+
+    public ApiError() {
+    }
 
     public ApiError(final ErrorCode errorCode,
                     final String description) {

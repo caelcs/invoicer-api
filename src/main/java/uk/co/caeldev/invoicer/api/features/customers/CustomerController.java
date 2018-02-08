@@ -35,7 +35,7 @@ public class CustomerController {
                         .build());
     }
 
-    @PostMapping(value="/customers/{customerId}",
+    @PostMapping(value="/customers/{customerGuid}",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<CustomerResource> update(final @PathVariable UUID customerGuid,

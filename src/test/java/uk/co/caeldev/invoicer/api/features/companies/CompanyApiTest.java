@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.co.caeldev.invoicer.api.BaseIntegrationTest;
+import uk.co.caeldev.invoicer.api.features.common.exception.ApiError;
+import uk.co.caeldev.invoicer.api.features.common.exception.ErrorCode;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -76,6 +78,28 @@ public class CompanyApiTest extends BaseIntegrationTest {
     }
 
     @Test
+    public void shouldFailUpdateCompanyWhenCompanyDoesNotExists() {
+        //Given
+        final CompanyRequest companyRequest = TestCompanyRequestBuilder.newBuilder().build();
+
+        //Then
+        final ApiError error = given()
+                .port(serverPort)
+                .headers("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("companyGuid", UUID.randomUUID())
+                .body(companyRequest)
+                .when()
+                .post("/companies/{companyGuid}")
+                .then()
+                .assertThat()
+                .statusCode(equalTo(NOT_FOUND.value())).extract().body().as(ApiError.class);
+
+        assertThat(error).isNotNull();
+        assertThat(error.getCode()).isEqualTo(ErrorCode.NOT_FOUND.getCode());
+        assertThat(error.getMessage()).isEqualTo(ErrorCode.NOT_FOUND.getMessage());
+    }
+
+    @Test
     public void shouldGetLatestCompanyVersion() {
         //Given
         final Company company = TestCompanyBuilder.newBuilder().build();
@@ -116,16 +140,21 @@ public class CompanyApiTest extends BaseIntegrationTest {
         final CompanyRequest companyRequest = TestCompanyRequestBuilder.newBuilder().build();
 
         //Then
-        given()
-            .port(serverPort)
-            .headers("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-            .pathParam("companyGuid", UUID.randomUUID())
-            .body(companyRequest)
-            .when()
-            .get("/companies/{companyGuid}")
-            .then()
-            .assertThat()
-            .statusCode(equalTo(NOT_FOUND.value()));
+        final ApiError error = given()
+                .port(serverPort)
+                .headers("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("companyGuid", UUID.randomUUID())
+                .body(companyRequest)
+                .when()
+                .get("/companies/{companyGuid}")
+                .then()
+                .assertThat()
+                .statusCode(equalTo(NOT_FOUND.value())).and().extract().body().as(ApiError.class);
+
+        //And
+        assertThat(error).isNotNull();
+        assertThat(error.getCode()).isEqualTo(ErrorCode.NOT_FOUND.getCode());
+        assertThat(error.getMessage()).isEqualTo(ErrorCode.NOT_FOUND.getMessage());
     }
 
     @Test
