@@ -3,12 +3,11 @@ package uk.co.caeldev.invoicer.api.features.customers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 public class CustomerController {
@@ -50,5 +49,18 @@ public class CustomerController {
                         .newBuilder()
                         .withCustomer(customer)
                         .build());
+    }
+
+    @GetMapping(value = "/customers",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<CustomerResource>> getAll() {
+
+        final List<Customer> all = customerService.findAll();
+
+        final List<CustomerResource> allCustomerResources = all.stream().map(customer ->
+            CustomerResourceBuilder.newBuilder().withCustomer(customer).build()
+        ).collect(Collectors.toList());
+
+        return ResponseEntity.ok(allCustomerResources);
     }
 }

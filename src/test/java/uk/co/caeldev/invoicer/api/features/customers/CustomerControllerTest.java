@@ -10,12 +10,15 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 import uk.co.caeldev.invoicer.api.features.common.exception.ObjectNotFoundException;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
+import static uk.co.caeldev.invoicer.api.features.common.Generators.ofCustomer;
+import static uk.org.fyodor.generators.RDG.list;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerControllerTest {
@@ -102,4 +105,19 @@ public class CustomerControllerTest {
         customerController.update(customerGuid, customerRequest);
     }
 
+    @Test
+    public void shouldGetAllCustomers() {
+        //Given
+        final List<Customer> expectedCustomers = list(ofCustomer()).next();
+        when(customerService.findAll())
+                .thenReturn(expectedCustomers);
+
+        //When
+        final ResponseEntity<List<CustomerResource>> result = customerController.getAll();
+
+        //Then
+        assertThat(result.getStatusCode()).isEqualTo(OK);
+        assertThat(result.getBody()).isNotNull();
+        assertThat(result.getBody()).hasSameSizeAs(expectedCustomers);
+    }
 }
