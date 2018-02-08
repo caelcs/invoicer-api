@@ -1,5 +1,6 @@
 package uk.co.caeldev.invoicer.api.features.companies;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class CompanyApiTest extends BaseIntegrationTest {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Before
+    public void testee() {
+        companyRepository.deleteAll();
+    }
 
     @Test
     public void shouldCreateCompany() {

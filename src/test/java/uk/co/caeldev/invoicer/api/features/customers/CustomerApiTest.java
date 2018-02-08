@@ -1,5 +1,6 @@
 package uk.co.caeldev.invoicer.api.features.customers;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,11 @@ public class CustomerApiTest extends BaseIntegrationTest {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Before
+    public void testee() {
+        customerRepository.deleteAll();
+    }
+    
     @Test
     public void shouldCreateCustomer() {
         //Given
