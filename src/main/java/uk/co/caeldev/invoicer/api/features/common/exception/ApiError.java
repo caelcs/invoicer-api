@@ -6,7 +6,8 @@ public class ApiError {
     private String message;
     private final String description;
 
-    public ApiError(final ErrorCode errorCode, String description) {
+    public ApiError(final ErrorCode errorCode,
+                    final String description) {
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
         this.description = description;
