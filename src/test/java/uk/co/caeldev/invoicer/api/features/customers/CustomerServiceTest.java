@@ -10,13 +10,14 @@ import org.mockito.runners.MockitoJUnitRunner;
 import uk.co.caeldev.invoicer.api.features.common.exception.ObjectNotFoundException;
 import uk.co.caeldev.invoicer.api.features.common.utils.EntityMerger;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static uk.org.fyodor.generators.RDG.postcode;
-import static uk.org.fyodor.generators.RDG.string;
+import static uk.co.caeldev.invoicer.api.features.common.Generators.ofCustomer;
+import static uk.org.fyodor.generators.RDG.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerServiceTest {
@@ -119,6 +120,21 @@ public class CustomerServiceTest {
         //When
         customerService.update(customerGuid, name, address, postCode, vatNumber);
 
+    }
+
+    @Test
+    public void shouldFindAllCustomers() {
+        //Given
+        final List<Customer> expectedCustomers = list(ofCustomer()).next();
+        when(customerRepository.findAll())
+                .thenReturn(expectedCustomers);
+
+        //When
+        final List<Customer> all = customerService.findAll();
+
+        //Then
+        assertThat(all).isNotNull();
+        assertThat(all).hasSameSizeAs(expectedCustomers);
     }
 
 }

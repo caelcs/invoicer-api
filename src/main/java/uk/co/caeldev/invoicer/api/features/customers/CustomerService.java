@@ -1,11 +1,13 @@
 package uk.co.caeldev.invoicer.api.features.customers;
 
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.caeldev.invoicer.api.features.common.exception.ObjectNotFoundException;
 import uk.co.caeldev.invoicer.api.features.common.utils.EntityMerger;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -56,5 +58,10 @@ public class CustomerService {
 
         return customerRepository.save(customerToBeSaved);
 
+    }
+
+    public List<Customer> findAll() {
+        LOGGER.info("find all customers");
+        return Lists.newArrayList(customerRepository.findAll());
     }
 }

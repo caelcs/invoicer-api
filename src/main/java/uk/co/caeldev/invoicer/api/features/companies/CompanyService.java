@@ -1,5 +1,6 @@
 package uk.co.caeldev.invoicer.api.features.companies;
 
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.caeldev.invoicer.api.features.common.domain.Bank;
@@ -81,6 +82,6 @@ public class CompanyService {
     }
 
     public List<Company> findAll() {
-        return null;
+        return Lists.newArrayList(companyRepository.findAll());
     }
 }

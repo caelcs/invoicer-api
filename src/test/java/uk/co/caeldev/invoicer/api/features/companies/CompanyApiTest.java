@@ -9,6 +9,7 @@ import uk.co.caeldev.invoicer.api.BaseIntegrationTest;
 import uk.co.caeldev.invoicer.api.features.common.exception.ApiError;
 import uk.co.caeldev.invoicer.api.features.common.exception.ErrorCode;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -196,5 +197,26 @@ public class CompanyApiTest extends BaseIntegrationTest {
         assertThat(error).isNotNull();
         assertThat(error.getCode()).isEqualTo(ErrorCode.NOT_FOUND.getCode());
         assertThat(error.getMessage()).isEqualTo(ErrorCode.NOT_FOUND.getMessage());
+    }
+
+    @Test
+    public void shouldGetAllCompanies() {
+        //Given
+        final Company company = TestCompanyBuilder.newBuilder().build();
+        companyRepository.save(company);
+
+        //Then
+        final List<CompanyResource> companyResources = given()
+                .port(serverPort)
+                .headers("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/companies")
+                .then()
+                .assertThat()
+                .statusCode(equalTo(OK.value())).and().extract().body().as(List.class);
+
+        //And
+        assertThat(companyResources).isNotNull();
+        assertThat(companyResources).hasSize(1);
     }
 }

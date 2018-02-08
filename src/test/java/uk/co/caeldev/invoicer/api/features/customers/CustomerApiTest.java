@@ -8,8 +8,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import uk.co.caeldev.invoicer.api.BaseIntegrationTest;
 import uk.co.caeldev.invoicer.api.features.common.exception.ApiError;
 import uk.co.caeldev.invoicer.api.features.common.exception.ErrorCode;
+import uk.co.caeldev.invoicer.api.features.companies.Company;
+import uk.co.caeldev.invoicer.api.features.companies.CompanyResource;
+import uk.co.caeldev.invoicer.api.features.companies.TestCompanyBuilder;
 import uk.co.caeldev.invoicer.api.features.customers.*;
 
+import java.util.List;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
@@ -99,5 +103,26 @@ public class CustomerApiTest extends BaseIntegrationTest {
         assertThat(result).isNotNull();
         assertThat(result.getCode()).isEqualTo(ErrorCode.NOT_FOUND.getCode());
         assertThat(result.getMessage()).isEqualTo(ErrorCode.NOT_FOUND.getMessage());
+    }
+
+    @Test
+    public void shouldGetAllCustomers() {
+        //Given
+        final Customer customer = TestCustomerBuilder.newBuilder().build();
+        customerRepository.save(customer);
+
+        //Then
+        final List<CustomerResource> customers = given()
+                .port(serverPort)
+                .headers("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/customers")
+                .then()
+                .assertThat()
+                .statusCode(equalTo(OK.value())).and().extract().body().as(List.class);
+
+        //And
+        assertThat(customers).isNotNull();
+        assertThat(customers).hasSize(1);
     }
 }

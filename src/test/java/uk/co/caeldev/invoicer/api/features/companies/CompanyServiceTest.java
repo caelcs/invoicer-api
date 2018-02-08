@@ -11,12 +11,15 @@ import uk.co.caeldev.invoicer.api.features.common.domain.Bank;
 import uk.co.caeldev.invoicer.api.features.common.exception.ObjectNotFoundException;
 import uk.co.caeldev.invoicer.api.features.common.utils.EntityMerger;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.co.caeldev.invoicer.api.features.common.Generators.ofCompany;
+import static uk.org.fyodor.generators.RDG.list;
 import static uk.org.fyodor.generators.RDG.postcode;
 import static uk.org.fyodor.generators.RDG.string;
 
@@ -207,6 +210,21 @@ public class CompanyServiceTest {
 
         //When
         companyService.delete(companyGuid);
+    }
+
+    @Test
+    public void shouldGetAllCompanies() {
+        //Given
+        final List<Company> expectedCompanies = list(ofCompany()).next();
+        when(companyRepository.findAll())
+                .thenReturn(expectedCompanies);
+
+        //When
+        final List<Company> all = companyService.findAll();
+
+        //Then
+        assertThat(all).isNotNull();
+        assertThat(all).hasSameSizeAs(expectedCompanies);
     }
 
 }
