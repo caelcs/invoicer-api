@@ -7,6 +7,7 @@ import uk.co.caeldev.invoicer.api.features.common.exception.ObjectNotFoundExcept
 import uk.co.caeldev.invoicer.api.features.common.utils.EntityMerger;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -77,5 +78,9 @@ public class CompanyService {
         final Company latestByGuid = findLatestByGuid(companyGuid);
 
         companyRepository.delete(latestByGuid);
+    }
+
+    public List<Company> findAll() {
+        return null;
     }
 }

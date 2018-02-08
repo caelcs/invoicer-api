@@ -9,12 +9,15 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import uk.co.caeldev.invoicer.api.features.common.Generators;
 import uk.co.caeldev.invoicer.api.features.common.exception.ServiceException;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static uk.org.fyodor.generators.RDG.list;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyControllerTest {
@@ -140,6 +143,21 @@ public class CompanyControllerTest {
 
         //Then
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
+    public void shouldGetAllCompanies() {
+        //Given
+        final List<Company> expectedCompanies = list(Generators.ofCompany()).next();
+        when(companyService.findAll()).thenReturn(expectedCompanies);
+
+        //When
+        final ResponseEntity<List<CompanyResource>> result = companyController.getAll();
+
+        //Then
+        final List<CompanyResource> body = result.getBody();
+        assertThat(body).isNotNull();
+        assertThat(body).hasSameSizeAs(expectedCompanies);
     }
 
 }

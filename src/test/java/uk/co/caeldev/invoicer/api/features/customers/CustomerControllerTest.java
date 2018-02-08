@@ -101,5 +101,4 @@ public class CustomerControllerTest {
         //When
         customerController.update(customerGuid, customerRequest);
     }
-
 }
