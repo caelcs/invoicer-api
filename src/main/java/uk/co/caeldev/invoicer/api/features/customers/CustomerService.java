@@ -42,7 +42,7 @@ public class CustomerService {
                            final String address,
                            final String postCode,
                            final String vatNumber) {
-
+        LOGGER.info("Updating new customer");
         final Optional<Customer> latestByGuid = customerRepository.findLatestByGuid(customerGuid);
 
         if (!latestByGuid.isPresent()) {
