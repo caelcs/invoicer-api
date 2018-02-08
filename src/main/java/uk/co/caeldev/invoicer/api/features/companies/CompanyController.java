@@ -3,6 +3,7 @@ package uk.co.caeldev.invoicer.api.features.companies;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uk.co.caeldev.invoicer.api.features.common.exception.ObjectNotFoundException;
 
 import javax.websocket.server.PathParam;
 import java.util.Optional;
@@ -53,29 +54,19 @@ public class CompanyController {
     @GetMapping(value = "/companies/{companyGuid}",
             produces = {APPLICATION_JSON_VALUE})
     public ResponseEntity<CompanyResource> get(final @PathVariable UUID companyGuid) {
-        final Optional<Company> latestByGuid = companyService.findLatestByGuid(companyGuid);
-
-        if (!latestByGuid.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
+        final Company latestByGuid = companyService.findLatestByGuid(companyGuid);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CompanyResourceBuilder
                         .newBuilder()
-                        .withCompany(latestByGuid.get())
+                        .withCompany(latestByGuid)
                         .build());
     }
 
     @DeleteMapping("/companies/{companyGuid}")
     public ResponseEntity delete(final @PathVariable("companyGuid") UUID companyGuid) {
-        final Optional<Company> company = companyService.findLatestByGuid(companyGuid);
-
-        if (!company.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        companyService.delete(company.get());
+        companyService.delete(companyGuid);
         return ResponseEntity.noContent().build();
     }
 }

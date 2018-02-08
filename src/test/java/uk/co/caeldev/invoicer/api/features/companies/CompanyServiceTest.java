@@ -1,11 +1,14 @@
 package uk.co.caeldev.invoicer.api.features.companies;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.co.caeldev.invoicer.api.features.common.domain.Bank;
+import uk.co.caeldev.invoicer.api.features.common.exception.ObjectNotFoundException;
 import uk.co.caeldev.invoicer.api.features.common.utils.EntityMerger;
 
 import java.util.Optional;
@@ -19,6 +22,9 @@ import static uk.org.fyodor.generators.RDG.string;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyServiceTest {
+
+    @Rule
+    public final ExpectedException expectedException = ExpectedException.none();
 
     @Mock
     private CompanyRepository companyRepository;
@@ -115,6 +121,27 @@ public class CompanyServiceTest {
     }
 
     @Test
+    public void shouldUpdateCompanyThrowExceptionWhenCompanyDoesNotExists() {
+        //Given
+        final UUID companyGuid = UUID.randomUUID();
+        final String name = string().next();
+        final String address = string().next();
+        final Bank bank = TestBankBuilder.newBuilder().build();
+        final String postCode = postcode().next();
+        final String vatNumber = string().next();
+
+        //And
+        when(companyRepository.findLatestByGuid(companyGuid))
+                .thenReturn(Optional.empty());
+
+        //Expect
+        expectedException.expect(ObjectNotFoundException.class);
+
+        //When
+        companyService.update(companyGuid, name, address, bank, postCode, vatNumber);
+    }
+
+    @Test
     public void shouldGetLatestCompany() {
         //Given
         final UUID companyGuid = UUID.randomUUID();
@@ -125,24 +152,61 @@ public class CompanyServiceTest {
                 .thenReturn(Optional.of(expectedCompany));
 
         //When
-        final Optional<Company> latestByGuid = companyService.findLatestByGuid(companyGuid);
+        final Company latestByGuid = companyService.findLatestByGuid(companyGuid);
 
         //Then
-        assertThat(latestByGuid.isPresent()).isTrue();
-        assertThat(latestByGuid.get()).isEqualTo(expectedCompany);
+        assertThat(latestByGuid).isEqualTo(expectedCompany);
+    }
+
+    @Test
+    public void shouldFindLatestByGuidThrowExceptionWhenCompanyDoesNotExists() {
+        //Given
+        final UUID companyGuid = UUID.randomUUID();
+
+        //And
+        when(companyRepository.findLatestByGuid(companyGuid))
+                .thenReturn(Optional.empty());
+
+        //Expect
+        expectedException.expect(ObjectNotFoundException.class);
+
+        //When
+        companyService.findLatestByGuid(companyGuid);
+
     }
 
     @Test
     public void shouldDeleteCompany() {
         //Given
-        final Company company = TestCompanyBuilder.newBuilder().build();
+        final UUID companyGuid = UUID.randomUUID();
+
+        //And
+        final Company expectedCompany = TestCompanyBuilder.newBuilder().build();
+        when(companyRepository.findLatestByGuid(companyGuid))
+                .thenReturn(Optional.of(expectedCompany));
 
         //When
-        companyService.delete(company);
+        companyService.delete(companyGuid);
 
         //Then
-        verify(companyRepository).delete(company);
+        verify(companyRepository).delete(expectedCompany);
 
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenCompanyDoesNotExists() {
+        //Given
+        final UUID companyGuid = UUID.randomUUID();
+
+        //And
+        when(companyRepository.findLatestByGuid(companyGuid))
+                .thenReturn(Optional.empty());
+
+        //Expect
+        expectedException.expect(ObjectNotFoundException.class);
+
+        //When
+        companyService.delete(companyGuid);
     }
 
 }
