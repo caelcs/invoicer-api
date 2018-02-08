@@ -178,4 +178,23 @@ public class CompanyApiTest extends BaseIntegrationTest {
         final Optional<Company> latestCompany = companyRepository.findLatestByGuid(savedCompany.getGuid());
         assertThat(latestCompany.isPresent()).isFalse();
     }
+
+    @Test
+    public void shouldDeleteCompanyFailWhenCoompanyDoesNotExists() {
+        //When
+        final ApiError error = given()
+                .port(serverPort)
+                .headers("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("companyGuid", UUID.randomUUID())
+                .when()
+                .delete("/companies/{companyGuid}")
+                .then()
+                .assertThat()
+                .statusCode(equalTo(NOT_FOUND.value())).and().extract().body().as(ApiError.class);
+
+        //And
+        assertThat(error).isNotNull();
+        assertThat(error.getCode()).isEqualTo(ErrorCode.NOT_FOUND.getCode());
+        assertThat(error.getMessage()).isEqualTo(ErrorCode.NOT_FOUND.getMessage());
+    }
 }
