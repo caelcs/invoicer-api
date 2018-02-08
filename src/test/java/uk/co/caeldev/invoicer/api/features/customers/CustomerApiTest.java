@@ -1,4 +1,4 @@
-package uk.co.caeldev.invoicer.api.features.companies;
+package uk.co.caeldev.invoicer.api.features.customers;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
